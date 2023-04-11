@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+        
+		// vscode에서 C 프로그램을 개발하고 실행하기 위해 필요한 초기 환경 설정.
+        //     작성자: 양 상봉
+        //     날  짜: 2023.04.10
+
+        // ===============================
+        // for Terminal
+        // -------------------------------
+        // Git bash 용 터미널 프로파일 등록하기
+        "terminal.integrated.profiles.windows": {
+            "GitBash": {
+                "path": ["C:\\MinGW\\git\\bin\\bash.exe"],
+                "args": ["--login"],
+                "icon": "terminal-bash"
+            }
+        },
+    
+        // VS Code 기본 터미널을 Git bash로 변경하기
+        "terminal.integrated.defaultProfile.windows": "GitBash",
+    
+        // ===============================
+        // for Code Runner
+        // -------------------------------
+        // 코드를 터미널에서 실행하기
+        "code-runner.runInTerminal": true,
+    
+        // bash 터미널 사용 시 root 표시를 리눅스 형식으로 보이기
+        "code-runner.terminalRoot":"/",
+    
+        // C 코드 컴파일 및 실행 방법 기술
+        "code-runner.executorMap": {
+            // 향후 모듈화 학습 후 그에 맞춰 아래 내용은 변경됨
+            "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt -g -Wall && $dir$fileNameWithoutExt"
+        },
+    
+        // 코드 조각의 일부를 선택하고 실행하지 않도록 방지하기
+        "code-runner.ignoreSelection": true,
+        "editor.fontSize": 13
+
+	}
+}
