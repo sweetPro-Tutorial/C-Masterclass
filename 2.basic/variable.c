@@ -195,3 +195,32 @@ int main() {
 
     // myName[1] = 'x';  // segmentation fault error
 }
+
+
+/* 
+실행 예시 :
+
+Hello world
+Hello YoungHee 2024
+trial = 36
+myLongLong=300000
+size of short=2 bytes
+size of int=4 bytes
+size of long=4 bytes
+size of long long=8 bytes
+size of float = 4 bytes
+size of double = 8 bytes
+size of long double = 16 bytes
+myFloat = 987654.312500
+myFloat + 0.05 = 987654.375000
+myDouble  = 987654.321000
+myDouble + 0.05 = 987654.371000
+dollar3 * 100 = 419.999969
+pennies1, pennies2, pennies3=99,123,419
+pennies1, pennies2, pennies3=99,123,420
+1st character in string = S
+last character in string = o
+last character in string = o
+1st character in string = S
+
+*/
