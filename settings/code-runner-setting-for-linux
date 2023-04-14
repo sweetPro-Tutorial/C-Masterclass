@@ -1,0 +1,5 @@
+    "code-runner.executorMap": {
+        // 향후 모듈화 학습 후 그에 맞춰 아래 내용은 변경됨
+        "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt -g -Wall -lm && $dir$fileNameWithoutExt"
+    },
+    
