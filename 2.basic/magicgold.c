@@ -18,6 +18,8 @@ int main() {
     // -------------------- -------------
     int sum;            // 합계 (ⓐ - ⓑ) = 120개
 
+    printf("[마법 금화 계산 프로그램]\n");
+
     printf("경과한 기간(일)을 입력하세요(예: 30) : ");
     scanf("%d", &passedDays);
 
@@ -25,10 +27,6 @@ int main() {
     usedGolds = dailyUsed * passedDays; // ⓑ
     sum = madeGolds - usedGolds;  // ⓐ - ⓑ
 
-    printf("[마법 금화 계산 프로그램]\n");
     printf("경과한 시간 : %d 일\n", passedDays);
     printf("남은 금화 개수 : %d 개\n", sum);
-
-
-    // scanf("입력할 포맷 문자열", 변수의 주소);
 }
