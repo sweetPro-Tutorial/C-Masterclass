@@ -43,7 +43,10 @@
         // 코드 조각의 일부를 선택하고 실행하지 않도록 방지하기
         "code-runner.ignoreSelection": true,
         "editor.fontSize": 12,
-        "terminal.integrated.fontSize": 12
+        "terminal.integrated.fontSize": 12,
+        "files.associations": {
+            "stdlib.h": "c"
+        }
 
 	}
 }
