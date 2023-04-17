@@ -39,9 +39,6 @@ int main() {
 
 
 
-
-
-
     // 0이 너무 많으면, "과학계산용" 표기로 표현하는게 편함.
     const double h = 6.62607015e-34;  // Planck constant
     printf("h = %.45f\n", h);  // 포맷 문자 '%' 와 변환 문자 'f' 사이에
