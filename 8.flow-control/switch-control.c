@@ -13,11 +13,7 @@
 #define HARD      2
 #define NIGHTMARE 3
 
-
 #define MAX_TEMPERATURE 100
-
-
-
 
 // 게임의 난이도에 따라 등장하는 적의 수 세팅
 void setNoOfEnemies_usingif(int difficulty, int *noOfEnemies);
@@ -29,18 +25,14 @@ void setNoOfEnemies_usingswitch(int difficulty, int *noOfEnemies);
 void countCharacters(void);
 
 
-
-
 int main() {
     int difficulty = NORMAL;
     int noOfEnemies = 0;
     setNoOfEnemies_usingif(difficulty, &noOfEnemies);
     printf("difficulty, noOfEnemies = %d, %d\n", difficulty, noOfEnemies);
 
-
     setNoOfEnemies_usingswitch(difficulty, &noOfEnemies);
     printf("difficulty, noOfEnemies = %d, %d\n", difficulty, noOfEnemies);
-
 
     // to count characters:
     //   number, alphabet, white space, and all other characters
@@ -49,8 +41,7 @@ int main() {
            ">>> ");
     countCharacters();
 
-
-   
+ 
     // 조건 연산자의 사용법:
     //   조건식  ?  계산식A  :  계산식B
 
@@ -64,11 +55,8 @@ int main() {
     // }
 
 
-
-
     int temperature = 40;
     bool isAlarm = false;
-
 
     // 조건 연산자:
     isAlarm = (temperature > MAX_TEMPERATURE) ? true : false;
@@ -93,8 +81,6 @@ int main() {
     //   A + B
     // 조건연산자 ? : 은 피연산자가 3개인 연산자:
     //   C ? A : B
-
-
 
 
     return 0;
