@@ -81,15 +81,6 @@ int main() {
 
 
 
-
-
-
-
-
-
-
-
-
    
     int value = 10;
     int result = 0;
