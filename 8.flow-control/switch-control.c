@@ -1,5 +1,5 @@
 // =====================================
-// flow control용 샘플 코드
+// switch control용 샘플 코드
 //   작성자 : 양상봉
 //   작성일 : 
 // =====================================
@@ -179,5 +179,3 @@ void setNoOfEnemies_usingswitch(int difficulty, int *noOfEnemies) {
         break;
     }
 }
-
-
