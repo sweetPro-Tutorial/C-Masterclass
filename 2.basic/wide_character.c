@@ -49,7 +49,7 @@ Club   : ♣
 ★
 ★
 Spade  : ♠
-Diamond: ?   <<<--- cmd 터미널은 완벽히 유니코드를 출력하지 못함.
+Diamond: ?   <<<--- cmd 터미널은 유니코드를 완벽히 출력하지는 못함.
 Heart  : ♡
 Club   : ♣
 ♠ ? ♡ ♣
