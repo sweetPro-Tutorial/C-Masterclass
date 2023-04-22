@@ -13,12 +13,46 @@ int main() {
     setlocale(LC_CTYPE, "");  // 현재 로케일로 입출력에만 영향을 미침.
     wchar_t star = 0x2605;
     wprintf(L"%lc\n", star);
-    wprintf(L"\u2660 \u2661 \u2662 \u2663\n");
+    wprintf(L"%lc\n", 0x2605);
+
+    wchar_t spade = 0x2660;
+    wchar_t diamond = 0x2662;
+    wchar_t heart = 0x2661;
+    wchar_t club = 0x2663;
+    wprintf(L"Spade  : %lc\n", spade);
+    wprintf(L"Diamond: %lc\n", diamond);
+    wprintf(L"Heart  : %lc\n", heart);
+    wprintf(L"Club   : %lc\n", club);
+
+    wchar_t wstring_card[] = L"♠ ♢ ♡ ♣";
+    wprintf(L"\u2660 \u2662 \u2661 \u2663\n");
+    wprintf(L"%ls\n", wstring_card);
+
+    wchar_t wstring_hangle[] = L".한글.";    
+    wprintf(L"%ls\n", wstring_hangle);
 }
 
 /* 
-실행예시:
-
+실행예시: 리눅스(locale : ko_KR.UTF-8)
 ★
-♠ ♡ ? ♣
+★
+Spade  : ♠
+Diamond: ♢
+Heart  : ♡
+Club   : ♣
+♠ ♢ ♡ ♣
+♠ ♢ ♡ ♣
+.한글.
+
+=====================================
+실행예시: 윈도우 cmd(code page : 65001 = UTF-8)
+★
+★
+Spade  : ♠
+Diamond: ?
+Heart  : ♡
+Club   : ♣
+♠ ? ♡ ♣
+♠ ? ♡ ♣
+.한글.
 */
