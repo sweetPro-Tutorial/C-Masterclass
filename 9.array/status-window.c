@@ -19,11 +19,11 @@
 #define NAME_LENGTH 14
 #define DATA_SIZE   10
 
+
 // 이름 입력용
 void inputName(char *herosName);
 
 void printData(int *data);
-
  
 int main() {
     // 상태 초기화: 각각의 상태값은
@@ -32,10 +32,8 @@ int main() {
     // 문자열은 사용전에 0 으로 초기화
     char herosName[NAME_LENGTH + 1] = { 0, };  
 
-
     strcpy(herosName, "Gil Dong");
     printf(">>> herosName = %s\n", herosName);
-
 
     // 용사의 이름 입력
     inputName(herosName);
@@ -47,7 +45,6 @@ int main() {
     printf("----\n");
     printf("%s\n\n", herosName);
 
-
     printf( "레벨\t생명\t체력\t방어\t지능\t민첩\t골드\n"
             "----\t----\t----\t----\t----\t----\t----\n" );
     for(int i = 0; i < STATES_SIZE; i++) {
@@ -55,8 +52,7 @@ int main() {
     }
     printf("\n");
  
-
-
+   
     // C 언어가 제공하는 표준 파일 포인터 3가지:
     // -------------------------------------
     //   stdin  : 표준 입력장치로부터(예: 키보드) 입력용 파일 포인터
@@ -71,9 +67,9 @@ int main() {
     // ? 버퍼의 크기 - 1 (예: NAME_LENGTH - 1) 개의 문자를 읽고 난 후에 멈춤.
     //   이때 나머지 1 바이트는 널 문자 저장용임.
 
+
     return 0;
 }
-
 
 void printData(int *data) {
     for(int i = 0; i < DATA_SIZE; i++) {
@@ -81,7 +77,6 @@ void printData(int *data) {
     }
     printf("\n");
 }
-
 
 
 // 이름 입력용
