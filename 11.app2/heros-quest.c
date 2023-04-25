@@ -141,7 +141,6 @@ void playHero() {
         if(heroState == WIN || heroState == DIE) { break; }  //만약 승패가 결정되었으면 반복문을 빠져나감;
     }
     printf(">>> %s\n", (heroState == WIN ? "Congratulation!" : "You Die...") );
-    printf("\n점수: 용사의 이동 회수 = [%d]\n\n", moveCount);
 }
 
 
@@ -224,21 +223,16 @@ Position makeHerosNewPosition(char command, Position oldPos) {
 bool canMoveTo(Position newPos) {
     char what = map[newPos.row][newPos.col];
 
-
     switch(what) {
     case EMPTY: return true;  // 이동가능
     case WALL :
-        printf("용사: 벽에 부딪혔습니다. 이동할 수 없습니다.\n");
         return false; // 이동불가
     case TRAP :
-        printf("용사: 함정에 빠졌습니다.\n");
         return true;
     case GOLD : return true;
     case HERO :
-        printf("용사: 대기합니다.\n");
         return false;
     default   :
-        printf("용사: 대기합니다.\n");
         return false;
     }
 }
@@ -249,15 +243,12 @@ State checkGameState(Position newPos) {
     char what = map[newPos.row][newPos.col];
     int restGold = 0;  // 남은 골드 수 저장용
 
-
     switch(what) {
     case EMPTY: return PLAYING;  // 승패결정 안 났음
     case TRAP :
-        printf(">>> 아깝습니다. 패배했습니다.\n");
         return DIE;      // 패배 : 승패결정 났음
     case GOLD :
         restGold = countGold() - 1; // 골드 습득 후 나머지 골드 수 계산
-        printf("용사: 골드를 모았습니다. 남은 골드는 %d 개 입니다.\n", restGold);
         if(restGold == 0) { return WIN; }
         else { return PLAYING; }
     default   : return PLAYING;
