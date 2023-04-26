@@ -5,7 +5,6 @@
 // =====================================
 
 #include <stdio.h>
-#include <stdio.h>
 
 // 눈에 보이지 않는 문자
 #define BELL 7
