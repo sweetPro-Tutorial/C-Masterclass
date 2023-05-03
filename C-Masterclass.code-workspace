@@ -46,7 +46,8 @@
         "terminal.integrated.fontSize": 12,
         "files.associations": {
             "stdlib.h": "c",
-            "stdio.h": "c"
+            "stdio.h": "c",
+            "string.h": "c"
         }
 
 	}
