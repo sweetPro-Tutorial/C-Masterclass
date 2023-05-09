@@ -29,7 +29,7 @@
         // C 코드 컴파일 및 실행 방법 기술
         "code-runner.executorMap": {
             // 향후 모듈화 학습 후 그에 맞춰 아래 내용은 변경됨
-            "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+            "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt -g -Wall && $dir$fileNameWithoutExt"
         },
     
         // 코드 조각의 일부를 선택하고 실행하지 않도록 방지하기
