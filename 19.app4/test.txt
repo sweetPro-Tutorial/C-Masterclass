@@ -1,0 +1,9 @@
+Hello world.
+What a wonderful world.
+Your world is created by what you think.
+>>>world<<<
+"world"
+.
+scene 123
+page-123
+- page 123 -
