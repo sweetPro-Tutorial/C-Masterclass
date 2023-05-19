@@ -1,4 +1,6 @@
 #include "common.h"
+#include "list.h"
+#include "response-parser.h"
 
 
 void programTitle();
@@ -16,15 +18,26 @@ int main() {
     while(true) { 
         // 사용자로부터 질문을 입력 받는다.
         inputQuestion(question);  
-        printf("%s\n", question);
+        // printf("%s\n", question);
 
-        // 질문을 사용해서 정보연계용 요청 메시지를 생성한다.
-        // ChatGPT에게 요청 메시지를 전송한다.
-        // 응답 메시지를 수신한다.
         chatRequest(question);  // 정보연계
 
         // 응답 메시지로부터 필요한 데이터를 추출한다.
+        LinkedList list = { NULL, NULL, 0 };
+        if(!extractChatInfo(&list)) { return false; };
+        // printList(&list);  // test log
+
         // 사용자에게 ChatGPT의 응답을 보여준다.
+        printf("%s\n", getBeginNode(&list)->data);
+        eraseAllList(&list);
+
+        // bye handling
+        StringLong striped; 
+        strncpy(striped, strStrip(question), sizeof(StringLong));
+        if(match(question, "bye")) { 
+            printTitle("마이 챗봇을 종료합니다.");
+            exit(0); 
+        };
     }
 }
 
@@ -75,13 +88,13 @@ bool chatRequest(StringLong question) {
     // 윈도우에서의 문제해결: 쉘 스크립트 파일 호출 방식
     sprintf(requestCommand, "runme.sh" );       // for windows
     // sprintf(requestCommand, "./runme.sh" );  // for linux
-    printf("--- requestCommand=%s\n", requestCommand);  // test log
+    // printf("--- requestCommand=%s\n", requestCommand);  // test log
 
     makeQuestionJsonFile(question);  // make myquestion.json file
 
     // 요청용 명령어 실행 및 응답 메시지를 파일에 저장
     int result = system(requestCommand);
-    printf("system result=%d\n", result);
+    // printf("system result=%d\n", result);
     
     return true;
 }
