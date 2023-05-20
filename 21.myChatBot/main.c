@@ -42,7 +42,7 @@ int main() {
         // bye handling
         StringLong striped; 
         strncpy(striped, strStrip(question), sizeof(StringLong));
-        if(match(question, "bye")) { 
+        if(match(striped, "bye")) { 
             printTitle("마이 챗봇을 종료합니다.");
             exit(0); 
         };
