@@ -40,11 +40,9 @@ int main() {
         eraseAllList(&list);
 
         // bye handling
-        StringLong striped; 
-        strncpy(striped, strStrip(question), sizeof(StringLong));
-        if(match(striped, "bye")) { 
+        if(match_n(question, "bye", 3)) { 
             printTitle("마이 챗봇을 종료합니다.");
-            exit(0); 
+            return 0;
         };
     }
 }
@@ -104,7 +102,7 @@ bool chatRequest(StringLong question) {
     int result = system(requestCommand);
     // printf("system result=%d\n", result);
     
-    return true;
+    return true; 
 }
 
 // 파일 예시: 

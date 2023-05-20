@@ -30,8 +30,10 @@ void responseParse(LinkedList *list, char *data) {
             return;
         }
         if(isErrorData(token)) {   // 에러 메시지인지 확인
+            token = strtok_r(NULL, delimiter, &savePointer);  // 다음 토큰에 에러 내용 있음
+
             StringLong gptError;
-            parseChatData(gptError, token);  // 정보 추출
+            parseErrorData(gptError, token);  // 정보 추출
             pushFront(list, gptError);  // 추출한 정보로 리스트 작성
             return;
         }
@@ -68,13 +70,11 @@ bool parseChatData(StringLong *chatInfo, char *chatData) {
 }
 bool parseErrorData(StringLong *errorInfo, char *chatData) {
     // 문자열에서 "message": 아래의 내용을 끊어 내기
-    //   SAMPLE: "message": "Rate limit reached for default-gpt-3.5-turbo in...",
+    //   SAMPLE: "error": {
+    //     ==>     "message": "Rate limit reached for default-gpt-3.5-turbo...",
     String parseKey = "\"message\":";
     char *startPosition = strstr(chatData, parseKey) + strlen(parseKey);
-    // 앞뒤의 큰따옴표 제거
-    startPosition++;
-    startPosition[strlen(startPosition) - 1] = '\0';
 
-    snprintf(errorInfo, sizeof(StringLong) - 1, "--- ERROR: %s", startPosition);
+    snprintf(errorInfo, sizeof(StringLong) - 1, "--- ERROR message: %s", startPosition);
     return true;
 }
