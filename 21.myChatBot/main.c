@@ -1,3 +1,4 @@
+#include <locale.h>
 #include "common.h"
 #include "list.h"
 #include "response-parser.h"
@@ -9,8 +10,13 @@ bool isValidQuestion(StringLong question);  // 입력값이 정상인지 확인
 
 bool chatRequest(StringLong question);
 void makeQuestionJsonFile(StringLong question);
+// util: URL encoder: 성공시 encodedText 의 주소를, 실패(오버플로)시 NULL 반환
+char *urlEncode(StringLong encodedText, StringLong originalText);
+
 
 int main() {
+    setlocale(LC_ALL, ".UTF8");
+
     programTitle();
     printTitle("Send a message.");
 
@@ -24,7 +30,9 @@ int main() {
 
         // 응답 메시지로부터 필요한 데이터를 추출한다.
         LinkedList list = { NULL, NULL, 0 };
-        if(!extractChatInfo(&list)) { return false; };
+        if(!extractChatInfo(&list)) { 
+            printf("--- 접속지연 등의 이유로 ChatGPT로부터 응답을 받지 못했습니다. 다시 질문해 주세요.\n");
+        };
         // printList(&list);  // test log
 
         // 사용자에게 ChatGPT의 응답을 보여준다.
@@ -102,14 +110,46 @@ bool chatRequest(StringLong question) {
 // 파일 예시: 
 // { "model":"gpt-3.5-turbo", "messages":[{"role": "user", "content": "Hi!"}] }
 void makeQuestionJsonFile(StringLong question) {
-    FILE *fp = fopen("myquestion.json", "w");
+    StringLong questionUrlEncoded = { 0, };
+
+    if(urlEncode(questionUrlEncoded, question) == NULL) { return; }
+
+    FILE *fp = fopen("myquestion.json", "wb");
     fprintf(fp, 
         "{ \"model\":\"gpt-3.5-turbo\", "
         "  \"messages\": [ { \"role\": \"user\", \"content\": \"%s\" } ] }",
-        question);
+        questionUrlEncoded);
     fflush(fp);
     fclose(fp);
 }
+
+// util: URL encoder: 성공시 encodedText 의 주소를, 실패(오버플로)시 NULL 반환
+char *urlEncode(StringLong encodedText, StringLong originalText) {
+    const char hex[16] = "0123456789abcdef";
+    int maxPos = sizeof(StringLong) - 5;  // 최악의 경우를 고려.
+
+    memset(encodedText, 0x00, sizeof(StringLong));
+    int pos = 0;
+    for (int i = 0; i < strlen(originalText); i++) {
+        if(pos >= maxPos) { return NULL; }  // on overflow
+        char ch = originalText[i];
+        switch(ch) {
+        case 'a'...'z': 
+        case 'A'...'Z':
+        case '0'...'9':
+            encodedText[pos++] = ch;
+            break;
+        default:
+            // 기타문자와 한글은 url encoding
+            encodedText[pos++] = '%';
+            encodedText[pos++] = hex[0x0F & (ch >> 4)];
+            encodedText[pos++] = hex[0x0F & ch];
+            break;
+        }
+    }
+    return encodedText;
+}
+
 
 void inputQuestion(StringLong question) {
     printf("\n>>> ");
@@ -135,6 +175,10 @@ void programTitle() {
             "#                                                                 #\n"
             "#                     m y    C h a t    B o t                     #\n"
             "#                                                                 #\n"
+            "#      -----------------------------------------------------      #\n"
+            "#                                                                 #\n"
+            "#              (대화를 종료하려면 bye 를 입력하세요)              #\n"
+            "#                                                                 #\n"                        
             "###################################################################\n\n" );
 }
 

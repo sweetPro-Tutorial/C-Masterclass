@@ -11,7 +11,7 @@
 #include <errno.h>
 #include <unistd.h>
 
-#define LINE_SIZE           10240 // 긴   문자열용
+#define LINE_SIZE           30960 // 긴   문자열용
 #define ITEM_SIZE           100   // 짧은 문자열용
 
 #define SUCCESS       0

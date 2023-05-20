@@ -1,0 +1,6 @@
+{ "model":"gpt-3.5-turbo",   "messages": [ 
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": "Hello! How can I assist you today? AI stands for Artificial Intelligence. It is a field of computer science that aims to create machines that can perform tasks that would typically require human intelligence. AI systems learn from data, identify patterns, and make decisions based on the information they have learned. These systems can be used for a variety of applications, such as voice recognition, image and speech recognition, natural language processing, self-driving cars, and much more. There are several techniques that are used in AI, including machine learning, deep learning, and neural networks. Overall, AI is a rapidly advancing field that has the potential to revolutionize the way we live and work." },
+    { "role": "assistant", "content": "" },
+    { "role": "user", "content": " 한글로 !" }
+] }

@@ -22,10 +22,17 @@ void responseParse(LinkedList *list, char *data) {
     token = strtok_r(data, delimiter, &savePointer);
     while(token != NULL) {
         // printf(">>> token : %s\n", token);  // test log
-        if(isChatData(token)) {   // 유효한 객체인지 확인
+        // fflush(stdout);
+        if(isChatData(token)) {   // 답변 메시지인지 확인
             StringLong answer;
             parseChatData(answer, token);  // 정보 추출
             pushFront(list, answer);  // 추출한 정보로 리스트 작성
+            return;
+        }
+        if(isErrorData(token)) {   // 에러 메시지인지 확인
+            StringLong gptError;
+            parseChatData(gptError, token);  // 정보 추출
+            pushFront(list, gptError);  // 추출한 정보로 리스트 작성
             return;
         }
 
@@ -35,7 +42,15 @@ void responseParse(LinkedList *list, char *data) {
 }
 
 bool isChatData(char *token) {
-    if(match_n(token, "\"role\"", 4)) { return true; }
+    char *startPosition = strstr(token, "\"role\"");
+    if(startPosition == NULL) { return false; }
+    if(match_n(startPosition, "\"role\":", 7)) { return true; }
+    return false;
+}
+bool isErrorData(char *token) {
+    char *startPosition = strstr(token, "\"error\"");
+    if(startPosition == NULL) { return false; }
+    if(match_n(startPosition, "\"error\":", 8)) { return true; }
     return false;
 }
 
@@ -49,5 +64,17 @@ bool parseChatData(StringLong *chatInfo, char *chatData) {
     startPosition[strlen(startPosition) - 1] = '\0';
 
     strncpy(chatInfo, startPosition, sizeof(StringLong) - 1);
+    return true;
+}
+bool parseErrorData(StringLong *errorInfo, char *chatData) {
+    // 문자열에서 "message": 아래의 내용을 끊어 내기
+    //   SAMPLE: "message": "Rate limit reached for default-gpt-3.5-turbo in...",
+    String parseKey = "\"message\":";
+    char *startPosition = strstr(chatData, parseKey) + strlen(parseKey);
+    // 앞뒤의 큰따옴표 제거
+    startPosition++;
+    startPosition[strlen(startPosition) - 1] = '\0';
+
+    snprintf(errorInfo, sizeof(StringLong) - 1, "--- ERROR: %s", startPosition);
     return true;
 }
