@@ -24,6 +24,9 @@ void makeQuestionJsonFile(Questions *questions, LinkedList *list);  // ver.2
 
 // util: URL encoder: 성공시 encodedText 의 주소를, 실패(오버플로)시 NULL 반환
 char *urlEncode(StringLong encodedText, StringLong originalText);
+// util: 답변 데이터 내의 \n과 \" 가 들어 있을 경우,
+//       이들을 각각 줄바꿈과 큰따옴표로 '해석'해서 출력해 주는 함수.
+void printBufferWithEscapeChar(char* buffer);
 
 
 int main() {
@@ -49,7 +52,9 @@ int main() {
         // printList(&list);  // test log
 
         // 사용자에게 ChatGPT의 응답을 보여준다.
-        printf("%s\n", getBeginNode(&list)->data);
+        // printf("%s\n", getBeginNode(&list)->data);
+        printBufferWithEscapeChar(getBeginNode(&list)->data);
+        printf("\n");
 
         // 이번 챗 내용을 기입
         strncpy(questions.previous, questions.current, sizeof(StringLong) - 1);
@@ -174,13 +179,24 @@ char *urlEncode(StringLong encodedText, StringLong originalText) {
     for (int i = 0; i < strlen(originalText); i++) {
         if(pos >= maxPos) { return NULL; }  // on overflow
         char ch = originalText[i];
+        char nextCh = originalText[i + 1];
         switch(ch) {
         case 'a'...'z': 
         case 'A'...'Z':
         case '0'...'9':
         case '(': case ')':
         case '?': case ',': case '.': case '!':
-        case '\'': case ' ':
+        case ' ':
+            encodedText[pos++] = ch;
+            break;
+        case '\\':
+            if(nextCh == '"') {  // '\','"' --> %22
+                encodedText[pos++] = '%';
+                encodedText[pos++] = hex[0x0F & (nextCh >> 4)];
+                encodedText[pos++] = hex[0x0F & nextCh];
+                i++;  // skip '\','"'
+                break;
+            }
             encodedText[pos++] = ch;
             break;
         default:
@@ -227,5 +243,27 @@ void programTitle() {
 }
 
 
-
-
+// util: 답변 데이터 내의 \n과 \" 가 들어 있을 경우,
+//       이들을 각각 줄바꿈과 큰따옴표로 '해석'해서 출력해 주는 함수.
+void printBufferWithEscapeChar(char* buffer) {
+    for(int i = 0; i < strlen(buffer); i++) {
+        char currChar = buffer[i];
+        char nextChar = buffer[i + 1];
+        switch(currChar) {
+        case '\\':
+            if(nextChar == 'n') {  // 데이터 내에 '\','n' 발견
+                printf("\n");
+                i++;  // Skip '\','n'
+                break;
+            }
+            if(nextChar == '"') {  // 데이터 내에 '\','"' 발견
+                printf("\"");
+                i++;  // Skip '\','"'
+                break;
+            }
+        default:
+            printf("%c", currChar);
+            break;
+        }
+    }
+}
