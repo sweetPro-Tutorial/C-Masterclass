@@ -1,3 +1,7 @@
+//
+// version 2.0
+// 
+
 #include <locale.h>
 #include "common.h"
 #include "list.h"
