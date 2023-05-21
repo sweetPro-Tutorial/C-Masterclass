@@ -1,1 +1,6 @@
-{ "model":"gpt-3.5-turbo",   "messages": [ { "role": "user", "content": "bye" } ] }
+{ "model":"gpt-3.5-turbo", "messages": [ 
+   { "role": "system",    "content": "You are a helpful assistant." }, 
+   { "role": "user",      "content": "%ec%98%81%ec%96%b4%eb%a1%9c" }, 
+   { "role": "assistant", "content": "%ec%98%81%ec%96%b4%eb%a1%9c%3a%5cn%5cnREST API (Representational State Transfer Application Programming Interface) is a web%2dbased architecture and client%2fserver application that uses HTTP protocol to transfer information and data. It is built around 6 constraints that make it different from other types of APIs%3a %5cn%5cn1. Client%2fServer Architecture %5cn2. Stateless %5cn3. Cacheable %5cn4. Layered System %5cn5. Code%2dOn%2dDemand (Server, Optional) %5cn6. Uniform Interface %5cn%5cnIn RESTful APIs, HTTP protocol is used, and HTTP methods (POST, GET, PUT, DELETE) are used to perform CRUD (Create, Read, Update, Delete) operations. The Response of the API can be in JSON or XML format. Each operation is addressed with a Uniform Resource Identifier (URI). %5cn%5cnTo describe it simply, REST API exposes specific URIs (Uniform Resource Identifiers) representing the data to be accessed%2fmodified%2fdeleted from the server. Data is exchanged between the server and the client in the form of JSON or XML to make it easier for the client to process. By understanding the server%2dclient architecture and features of RESTful, developers can efficiently process data." }, 
+   { "role": "user",      "content": "bye" }  
+] }

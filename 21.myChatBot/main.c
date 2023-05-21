@@ -3,45 +3,57 @@
 #include "list.h"
 #include "response-parser.h"
 
+typedef struct {
+    StringLong previous;
+    StringLong current;
+} Questions;
+
 
 void programTitle();
 void inputQuestion(StringLong question);  // 질문 입력
 bool isValidQuestion(StringLong question);  // 입력값이 정상인지 확인
 
-bool chatRequest(StringLong question);
-void makeQuestionJsonFile(StringLong question);
+// bool chatRequest(StringLong question);  // ver.1
+bool chatRequest(Questions *questions, LinkedList *list);  // ver.2
+// void makeQuestionJsonFile(StringLong question);  // ver.1
+void makeQuestionJsonFile(Questions *questions, LinkedList *list);  // ver.2
+
 // util: URL encoder: 성공시 encodedText 의 주소를, 실패(오버플로)시 NULL 반환
 char *urlEncode(StringLong encodedText, StringLong originalText);
 
 
 int main() {
-    setlocale(LC_ALL, ".UTF8");
+    // setlocale(LC_ALL, ".UTF8");
 
     programTitle();
     printTitle("Send a message.");
 
-    StringLong question;
+    Questions questions = { 0, };
+    LinkedList list = { NULL, NULL, 0 };
     while(true) { 
         // 사용자로부터 질문을 입력 받는다.
-        inputQuestion(question);  
+        inputQuestion(questions.current);  
         // printf("%s\n", question);
 
-        chatRequest(question);  // 정보연계
+        chatRequest(&questions, &list);  // 정보연계
 
         // 응답 메시지로부터 필요한 데이터를 추출한다.
-        LinkedList list = { NULL, NULL, 0 };
-        if(!extractChatInfo(&list)) { 
+        if(!extractChatInfo(&list) && !match_n(questions.current, "bye", 3)) {
             printf("--- 접속지연 등의 이유로 ChatGPT로부터 응답을 받지 못했습니다. 다시 질문해 주세요.\n");
+            continue;
         };
         // printList(&list);  // test log
 
         // 사용자에게 ChatGPT의 응답을 보여준다.
         printf("%s\n", getBeginNode(&list)->data);
-        eraseAllList(&list);
+
+        // 이번 챗 내용을 기입
+        strncpy(questions.previous, questions.current, sizeof(StringLong) - 1);
 
         // bye handling
-        if(match_n(question, "bye", 3)) { 
+        if(match_n(questions.current, "bye", 3)) { 
             printTitle("마이 챗봇을 종료합니다.");
+            eraseAllList(&list);
             return 0;
         };
     }
@@ -57,7 +69,7 @@ SAMPLE REQUEST:
         "messages": [{"role": "user", "content": "Hello!"}]
       }'
 */
-bool chatRequest(StringLong question) {
+bool chatRequest(Questions *questions, LinkedList *list) {
     // 전제조건: 환경변수 등록여부 확인
     if(getenv("OPENAI_API_KEY") == NULL) {
         printf( "API인증서 정보를 찾을 수 없습니다.\n"
@@ -96,7 +108,7 @@ bool chatRequest(StringLong question) {
     // sprintf(requestCommand, "./runme.sh" );  // for linux
     // printf("--- requestCommand=%s\n", requestCommand);  // test log
 
-    makeQuestionJsonFile(question);  // make myquestion.json file
+    makeQuestionJsonFile(questions, list);  // make myquestion.json file
 
     // 요청용 명령어 실행 및 응답 메시지를 파일에 저장
     int result = system(requestCommand);
@@ -105,18 +117,45 @@ bool chatRequest(StringLong question) {
     return true; 
 }
 
-// 파일 예시: 
+// 파일 예시1: 
 // { "model":"gpt-3.5-turbo", "messages":[{"role": "user", "content": "Hi!"}] }
-void makeQuestionJsonFile(StringLong question) {
-    StringLong questionUrlEncoded = { 0, };
+//
+// 파일 예시2: 
+// { "model":"gpt-3.5-turbo",   "messages": [ 
+//     { "role": "system", "content": "You are a helpful assistant." },
+//     { "role": "user", "content": "AI stands for Artificial Intelligence. It refers to the creation of intelligent machines that can perform tasks that typically require human intelligence, such as visual perception, speech recognition, decision-making, and language translation.\n\nAI involves the development of algorithms and computer programs that can learn and make decisions based on data input. The development of AI is based on the collection and analysis of large amounts of data to improve the accuracy and effectiveness of the algorithms used.\n\nAI has become increasingly important in modern society and is now widely used in a variety of industries, including healthcare, finance, transportation, and entertainment. Its potential applications are virtually limitless and continue to expand as technology advances." },
+//     { "role": "assistant", "content": "" },
+//     { "role": "user", "content": "summarize the above sentence in 30 words." }
+// ] }
+void makeQuestionJsonFile(Questions *questions, LinkedList *list) {
+    StringLong currQuestionUrlEncoded = { 0, };
+    StringLong prevQuestionUrlEncoded = { 0, };
+    StringLong prevAnswerUrlEncoded = { 0, };
+    
+    if(urlEncode(currQuestionUrlEncoded, questions->current) == NULL) { 
+        currQuestionUrlEncoded[0] = '\0';
+    }
 
-    if(urlEncode(questionUrlEncoded, question) == NULL) { return; }
+    // API 호출할 때, 직전의 대화도 반영하기 위해.
+    if(urlEncode(prevQuestionUrlEncoded, questions->previous) == NULL) { 
+        prevQuestionUrlEncoded[0] = '\0';
+    }
+    if(list->size > 0) {
+        char *lastAnswer = getBeginNode(list)->data;
+        if(urlEncode(prevAnswerUrlEncoded, lastAnswer) == NULL) { 
+            prevAnswerUrlEncoded[0] = '\0'; 
+        }
+    }
 
     FILE *fp = fopen("myquestion.json", "wb");
     fprintf(fp, 
-        "{ \"model\":\"gpt-3.5-turbo\", "
-        "  \"messages\": [ { \"role\": \"user\", \"content\": \"%s\" } ] }",
-        questionUrlEncoded);
+        "{ \"model\":\"gpt-3.5-turbo\", \"messages\": [ \n"
+        "   { \"role\": \"system\",    \"content\": \"You are a helpful assistant.\" }, \n"
+        "   { \"role\": \"user\",      \"content\": \"%s\" }, \n"
+        "   { \"role\": \"assistant\", \"content\": \"%s\" }, \n"
+        "   { \"role\": \"user\",      \"content\": \"%s\" }  \n"
+        "] }",
+        prevQuestionUrlEncoded, prevAnswerUrlEncoded, currQuestionUrlEncoded);
     fflush(fp);
     fclose(fp);
 }
@@ -135,6 +174,9 @@ char *urlEncode(StringLong encodedText, StringLong originalText) {
         case 'a'...'z': 
         case 'A'...'Z':
         case '0'...'9':
+        case '(': case ')':
+        case '?': case ',': case '.': case '!':
+        case '\'': case ' ':
             encodedText[pos++] = ch;
             break;
         default:
