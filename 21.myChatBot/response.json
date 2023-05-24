@@ -1,0 +1,1 @@
+{"id":"chatcmpl-7JebGTQ77KupKKSPlXfguf1VQ3XnM","object":"chat.completion","created":1684918654,"model":"gpt-3.5-turbo-0301","usage":{"prompt_tokens":30,"completion_tokens":8,"total_tokens":38},"choices":[{"message":{"role":"assistant","content":"Goodbye! Have a great day."},"finish_reason":"stop","index":0}]}
