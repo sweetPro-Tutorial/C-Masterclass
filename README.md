@@ -12,3 +12,8 @@
   
   https://github.com/sweetPro-Tutorial/APAS
 
+---
+
+<div align=center>
+	<img src="https://github.com/sweetPro-Tutorial/sweetPro-Tutorial/blob/main/book_description-754.jpg" />	
+</div>
