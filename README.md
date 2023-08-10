@@ -11,7 +11,7 @@
 
 # Source Code 레포지토리 #1
 
-+ [레포지토리 #1 <-- APAS 시스템을 제외한 모든 소스 코드](https://github.com/sweetPro-Tutorial/C-Masterclass)
++ [레포지토리 #1 <-- APAS 시스템을 제외한 모든 소스 코드 (here)](https://github.com/sweetPro-Tutorial/C-Masterclass)
   
 + [레포지토리 #2 <-- APAS 시스템용 소스 코드](https://github.com/sweetPro-Tutorial/APAS)
 
